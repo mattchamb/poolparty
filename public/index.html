@@ -1,0 +1,44 @@
+<html>
+<head>
+    <title>Something</title>
+</head>
+<body>
+    <div>
+        <form data-bind="submit: savePlayer">
+            <ul>
+                <li>
+                    <input type="text" data-bind="value: newPlayerName" />
+                </li>
+            </ul>
+            <input type="submit" value="Save" />
+        </form>
+    </div>
+    <div>
+        <ul data-bind="foreach: players">
+            <li>
+                <div data-bind="text: playerName"></div>
+                <a href="#" data-bind="click: $parent.deletePlayer">Delete</a>
+            </li>
+        </ul>
+    </div>
+    <div>
+        <form data-bind="submit: recordVictory">
+            <ul>
+                <li>
+                    Winner:
+                    <select data-bind="options: players, value: players[0], optionsText: 'playerName'"></select>
+                </li>
+                <li>
+                    Loser:
+                    <select data-bind="options: players, value: players[1], optionsText: 'playerName'"></select>
+                </li>
+            </ul>
+            <input type="submit" value="Record Victory" />
+        </form>
+    </div>
+    <script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-2.1.0.min.js"></script>
+    <script src="/vendor/knockout.js"></script>
+    <script src="/app.js"></script>
+</body>
+</html>
+    
