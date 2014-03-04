@@ -1,45 +1,138 @@
 <html>
 <head>
     <title>Something</title>
+
+    <link rel="stylesheet" type="text/css" href="/vendor/bootstrap.css" />
+    <link rel="stylesheet" type="text/css" href="/vendor/bootstrap-theme.css" />
+    <link rel="stylesheet" type="text/css" href="/styles/app.css" />
+
 </head>
 <body>
-    <div>
-        <form data-bind="submit: savePlayer">
-            <ul>
-                <li>
-                    <input type="text" data-bind="value: newPlayerName" />
-                </li>
-            </ul>
-            <input type="submit" value="Save" />
-        </form>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-3">
+                <h2>Players
+                </h2>
+                <div>
+                    <h3>New Player</h3>
+                    <form role="form" data-bind="submit: savePlayer">
+                        <div class="form-group">
+                            <label for="nameInput">Name</label>
+                            <input id="nameInput" type="text" data-bind="value: newPlayerName" />
+                            <input class="btn btn-default" type="submit" value="Add" />
+                        </div>
+                    </form>
+                </div>
+                <div>
+                    <ul class="playerList" data-bind="foreach: players">
+                        <li data-bind="text: playerName, css: { selected: playerId == $root.getSelectedPlayerId() }, click: $parent.setSelectedPlayer"></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="col-md-9">
+                <div class="row">
+                    <div class="col-md-9">
+                        <h2>Enter Match Result</h2>
+                        <form data-bind="submit: recordVictory">
+                            <div class="form-group">
+                                <select id="winnerList" class="form-control" data-bind="options: players, value: selectedWinner, optionsText: 'playerName'"></select>
+                                DEFEATED
+                                <select id="loserList" class="form-control" data-bind="options: players, value: selectedLoser, optionsText: 'playerName'"></select>
+                            </div>
+                            <input class="btn btn-default" type="submit" value="Save it baby!" />
+                        </form>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-9">
+                        <ul class="tabs" data-bind="foreach: tabs">
+                            <li data-bind="text: text, css: { selected: id == $root.chosenTabId() }, click: $root.goToTab"></li>
+                        </ul>
+                        <h2>
+                            Details
+                        </h2>
+                        <div id="allPlayers" data-bind="visible: 'allPlayers' == chosenTabId()">
+                            <table class="table table-striped table-condensed table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>Player</th>
+                                        <th>Wins</th>
+                                        <th>Losses</th>
+                                    </tr>
+                                </thead>
+                                <tbody data-bind="foreach: players">
+                                    <tr>
+                                        <td data-bind="text: playerName"></td>
+                                        <td data-bind="text: $parent.getWinsForPlayer($data)"></td>
+                                        <td data-bind="text: $parent.getLossesForPlayer($data)"></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div id="allMatches" data-bind="visible: 'allMatches' == chosenTabId()">
+                            <table class="table table-striped table-condensed">
+                                <thead>
+                                    <tr>
+                                        <th>Winner</th>
+                                        <th>Loser</th>
+                                        <th>Date</th>
+                                    </tr>
+                                </thead>
+                                <tbody data-bind="foreach: matches">
+                                    <tr>
+                                        <td data-bind="text: $root.getPlayerNameById($data.winnerId)"></td>
+                                        <td data-bind="text: $root.getPlayerNameById($data.loserId)"></td>
+                                        <td data-bind="text: time"></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div id="selectedPlayerStats" data-bind="visible: 'selectedPlayerStats' == chosenTabId()">
+                            <div data-bind="visible: selectedPlayer() == null">
+                                There is no selected player.
+                            </div>
+                            <div data-bind="with: selectedPlayer, visible: $data != null">
+                                <h3 data-bind="text: title"></h3>
+                                <div class="row">
+                                    <div class="col-md-3">
+                                        <table class="table table-striped table-condensed">
+                                            <thead>
+                                                <tr>
+                                                    <th>Has defeated:</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody data-bind="foreach: playersWonAgainst">
+                                                <tr>
+                                                    <td data-bind="text: $root.getPlayerNameById($data)"></td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <table class="table table-striped table-condensed">
+                                            <thead>
+                                                <tr>
+                                                    <th>Has lost to:</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody data-bind="foreach: playersLostAgainst">
+                                                <tr>
+                                                    <td data-bind="text: $root.getPlayerNameById($data)"></td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-    <div>
-        <ul data-bind="foreach: players">
-            <li>
-                <div data-bind="text: playerName"></div>
-                <a href="#" data-bind="click: $parent.deletePlayer">Delete</a>
-            </li>
-        </ul>
-    </div>
-    <div>
-        <form data-bind="submit: recordVictory">
-            <ul>
-                <li>
-                    Winner:
-                    <select data-bind="options: players, value: players[0], optionsText: 'playerName'"></select>
-                </li>
-                <li>
-                    Loser:
-                    <select data-bind="options: players, value: players[1], optionsText: 'playerName'"></select>
-                </li>
-            </ul>
-            <input type="submit" value="Record Victory" />
-        </form>
-    </div>
-    
+
     <script src="/vendor/jquery.js"></script>
-    <script src="/vendor/knockout.js"></script>
+    <script src="/vendor/knockout.debug.js"></script>
     <script src="/app.js"></script>
 </body>
 </html>
-    
