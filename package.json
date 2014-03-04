@@ -6,8 +6,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "",
-  "license": "ISC",
+  "author": "Matthew Chambers",
+  "license": "MIT",
   "dependencies": {
     "express": "^3.4.8",
     "sqlite3": "^2.2.0"
